@@ -53,6 +53,30 @@ async def asia_reed_menu(callback: types.CallbackQuery):
         parse_mode="Markdown"
     )
     await callback.answer()
+@dp.callback_query(F.data == "back_to_buy")
+async def back_to_buy_menu(callback: types.CallbackQuery):
+    text = (
+        "🛒 **شراء سيرفر**\n\n"
+        "اختر نوع السيرفر المناسب لك 👇\n\n"
+        "🇮🇶 **آسيا ريد**\n"
+        "⚡ سرعة واستقرار عالي\n\n"
+        "🎧 **أودي**\n"
+        "🚀 أداء ممتاز للتصفح والألعاب\n"
+        "____________________"
+    )
+    
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(text="🇮🇶 آسيا ريد", callback_data="asia_reed")
+    keyboard.button(text="🎧 أودي", callback_data="audi_server")
+    keyboard.button(text="🔙 رجوع", callback_data="back_home")
+    keyboard.adjust(1)
+    
+    await callback.message.edit_text(
+        text,
+        reply_markup=keyboard.as_markup(),
+        parse_mode="Markdown"
+    )
+    await callback.answer()
 
 async def main():
     logging.basicConfig(level=logging.INFO)
