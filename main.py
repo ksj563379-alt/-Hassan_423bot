@@ -31,7 +31,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# معالج دقيق يستجيب فوراً لأي زر يحتوي على كلمة "شراء"
+# 1. معالج الشراء يجب أن يكون في البداية حصراً
 @dp.message(F.text.casefold().contains("شراء"))
 async def buy_server_command(message: types.Message):
     text = (
@@ -52,6 +52,7 @@ async def buy_server_command(message: types.Message):
     
     await message.answer(text, reply_markup=keyboard.as_markup())
 
+# 2. معالج باقي النصوص يأتي ثانياً
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
