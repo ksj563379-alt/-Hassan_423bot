@@ -3,13 +3,22 @@ import logging
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
+from aiogram.types import BotCommand  # أضفنا هذا الاستدعاء الخاص بقائمة الأوامر
 
 TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# دالة القائمة الرئيسية (أزرار الـ Reply اللي بالأسفل)
+# دالة لتهيئة زر "القائمة" الأزرق (Menu)
+async def set_commands(bot: Bot):
+    commands = [
+        BotCommand(command="start", description="رسالة البدء")
+        # تكدر تضيف أوامر ثانية هنا بالمستقبل إذا تحب
+    ]
+    await bot.set_my_commands(commands)
+
+# دالة إنشاء القائمة الرئيسية (الأزرار اللي جوة)
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -25,7 +34,7 @@ def get_main_menu():
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
-# 1. معالج أمر /start (لازم يكون بالبداية)
+# 1. معالج أمر /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -127,6 +136,10 @@ async def back_to_home(callback: types.CallbackQuery):
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
+    
+    # تشغيل دالة الأوامر أول ما يشتغل البوت
+    await set_commands(bot)
+    
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
