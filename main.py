@@ -9,6 +9,18 @@ TOKEN = "8667998783:AAHsm_foWznXIvwk64h1zgH4-pIZZH3s3IA"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
+# ==================== (تعديل الأسعار من هنا بكل سهولة) ====================
+# أسعار باقات آسيا ريد (بالدينار)
+ASIA_3M_PRICE = "8000"
+ASIA_2M_PRICE = "6000"
+ASIA_1M_PRICE = "4000"
+
+# أسعار باقات أودي (بالدينار)
+AUDI_3M_PRICE = "3000"
+AUDI_2M_PRICE = "3000"
+AUDI_1M_PRICE = "3000"
+# =========================================================================
+
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -54,9 +66,9 @@ async def buy_server_command(message: types.Message):
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
-    keyboard.button(text="آسيا ريد 3 أشهر - 8000 دينار", callback_data="buy_asia_3m")
-    keyboard.button(text="آسيا ريد شهرين - 6000 دينار", callback_data="buy_asia_2m")
-    keyboard.button(text="آسيا ريد شهر - 4000 دينار", callback_data="buy_asia_1m")
+    keyboard.button(text=f"آسيا ريد 3 أشهر - {ASIA_3M_PRICE} دينار", callback_data="buy_asia_3m")
+    keyboard.button(text=f"آسيا ريد شهرين - {ASIA_2M_PRICE} دينار", callback_data="buy_asia_2m")
+    keyboard.button(text=f"آسيا ريد شهر - {ASIA_1M_PRICE} دينار", callback_data="buy_asia_1m")
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
@@ -66,9 +78,9 @@ async def asia_reed_menu(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
-    keyboard.button(text="أودي 3 أشهر - 8000 دينار", callback_data="buy_audi_3m")
-    keyboard.button(text="أودي شهرين - 6000 دينار", callback_data="buy_audi_2m")
-    keyboard.button(text="أودي شهر - 4000 دينار", callback_data="buy_audi_1m")
+    keyboard.button(text=f"أودي 3 أشهر - {AUDI_3M_PRICE} دينار", callback_data="buy_audi_3m")
+    keyboard.button(text=f"أودي شهرين - {AUDI_2M_PRICE} دينار", callback_data="buy_audi_2m")
+    keyboard.button(text=f"أودي شهر - {AUDI_1M_PRICE} دينار", callback_data="buy_audi_1m")
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
