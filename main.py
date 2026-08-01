@@ -4,7 +4,8 @@ import asyncio
 ‏from aiogram.filters import Command
 ‏from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 ‏
-‏TOKEN = 8670994653:AAEcbb_Kv0zgitR2dvqmOLL TkEKl81Tkqis"
+
+‏TOKEN =8670994653:AAEcbb_Kv0zgitR2dvqmOLL TkEKl81Tkqis"
 ‏
 ‏bot = Bot(token=TOKEN)
 ‏dp = Dispatcher()
@@ -66,10 +67,9 @@ import asyncio
 ‏@dp.callback_query(F.data == "audi_server")
 ‏async def audi_server_menu(callback: types.CallbackQuery):
 ‏    keyboard = InlineKeyboardBuilder()
-‏    # الأسعار الجديدة المباشرة هنا
-‏    keyboard.button(text="أودي 3 أشهر - 3000 دينار", callback_data="buy_audi_3m")
-‏    keyboard.button(text="أودي شهرين - 3000 دينار", callback_data="buy_audi_2m")
-‏    keyboard.button(text="أودي شهر - 2000 دينار", callback_data="buy_audi_1m")
+‏    keyboard.button(text="أودي 3 أشهر - 8000 دينار", callback_data="buy_audi_3m")
+‏    keyboard.button(text="أودي شهرين - 6000 دينار", callback_data="buy_audi_2m")
+‏    keyboard.button(text="أودي شهر - 4000 دينار", callback_data="buy_audi_1m")
 ‏    keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
 ‏    keyboard.adjust(1)
 ‏    
