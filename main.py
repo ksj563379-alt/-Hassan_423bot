@@ -31,7 +31,8 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-@dp.message(F.text == "🛒 شراء سيرفر")
+# معالج مرن لكلمة شراء سيرفر لضمان عدم تفويتها
+@dp.message(F.text.contains("شراء سيرفر"))
 async def buy_server_command(message: types.Message):
     text = (
         "🛒 شراء سيرفر\n\n"
