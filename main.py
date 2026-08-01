@@ -31,7 +31,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-@dp.message(F.text.contains("شراء سيرفر"))
+@dp.message(F.text.contains("شراء"))
 async def buy_server_command(message: types.Message):
     text = (
         "🛒 شراء سيرفر\n\n"
@@ -73,6 +73,7 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     await callback.message.edit_text("📊 باقات آسيا ريد: 🇮🇶", reply_markup=keyboard.as_markup())
     await callback.answer()
 
+# معالج زر أودي المحدث ليظهر القائمة تماماً كما طلبت
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -82,7 +83,11 @@ async def audi_server_menu(callback: types.CallbackQuery):
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
-    await callback.message.edit_text("🎧 باقات أودي:", reply_markup=keyboard.as_markup())
+    # استخدام edit_text مع تمرير الـ keyboard المعرّفة خصيصاً لباقات أودي
+    await callback.message.edit_text(
+        "🎧 اختر باقة أودي المناسبة لك 👇",
+        reply_markup=keyboard.as_markup()
+    )
     await callback.answer()
 
 @dp.callback_query(F.data == "back_to_buy")
