@@ -31,8 +31,8 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# معالج مباشر ومخصص للنص الذي يرسله الزر بالتحديد
-@dp.message(F.text == "🛒 شراء سيرفر")
+# معالج يعمل بأبسط طريقة ممكنة لأي رسالة تحتوي على كلمة "شراء"
+@dp.message(F.text.contains("شراء"))
 async def buy_server_command(message: types.Message):
     text = (
         "🛒 شراء سيرفر\n\n"
@@ -55,9 +55,9 @@ async def buy_server_command(message: types.Message):
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
-    keyboard.button(text="آسيا ريد 3 أشهر - 3000 دينار", callback_data="buy_asia_3m")
-    keyboard.button(text="آسيا ريد شهرين - 3000 دينار", callback_data="buy_asia_2m")
-    keyboard.button(text="آسيا ريد شهر - 3000 دينار", callback_data="buy_asia_1m")
+    keyboard.button(text="آسيا ريد 3 أشهر - 8000 دينار", callback_data="buy_asia_3m")
+    keyboard.button(text="آسيا ريد شهرين - 6000 دينار", callback_data="buy_asia_2m")
+    keyboard.button(text="آسيا ريد شهر - 4000 دينار", callback_data="buy_asia_1m")
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
@@ -67,9 +67,9 @@ async def asia_reed_menu(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
-    keyboard.button(text="أودي 3 أشهر - 3000 دينار", callback_data="buy_audi_3m")
-    keyboard.button(text="أودي شهرين - 3000 دينار", callback_data="buy_audi_2m")
-   keyboard.button(text="أودي شهر - 3000 دينار", callback_data="buy_audi_1m")
+    keyboard.button(text="أودي 3 أشهر - 8000 دينار", callback_data="buy_audi_3m")
+    keyboard.button(text="أودي شهرين - 6000 دينار", callback_data="buy_audi_2m")
+    keyboard.button(text="أودي شهر - 4000 دينار", callback_data="buy_audi_1m")
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
