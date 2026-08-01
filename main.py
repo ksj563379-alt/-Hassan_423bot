@@ -4,11 +4,13 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
+# التوكن الخاص ببوتك
 TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
+# القائمة الرئيسية
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -24,6 +26,7 @@ def get_main_menu():
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
+# أمر البداية /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -31,6 +34,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
+# زر شراء سيرفر
 @dp.message(F.text == "🛒 شراء سيرفر")
 async def buy_server_command(message: types.Message):
     text = (
@@ -51,6 +55,7 @@ async def buy_server_command(message: types.Message):
     
     await message.answer(text, reply_markup=keyboard.as_markup())
 
+# التعامل مع الرسائل النصية والأسعار
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
@@ -72,6 +77,7 @@ async def handle_all_messages(message: types.Message):
     else:
         await message.answer(f"النص المستلم: {txt}", reply_markup=get_main_menu())
 
+# باقات آسيا ريد
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -84,6 +90,7 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     await callback.message.edit_text("📊 باقات آسيا ريد: 🇮🇶", reply_markup=keyboard.as_markup())
     await callback.answer()
 
+# باقات أودي
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -96,6 +103,7 @@ async def audi_server_menu(callback: types.CallbackQuery):
     await callback.message.edit_text("🎧 باقات أودي:", reply_markup=keyboard.as_markup())
     await callback.answer()
 
+# زر الرجوع لشراء السيرفرات
 @dp.callback_query(F.data == "back_to_buy")
 async def back_to_buy_menu(callback: types.CallbackQuery):
     text = (
@@ -117,16 +125,19 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
     await callback.message.edit_text(text, reply_markup=keyboard.as_markup())
     await callback.answer()
 
+# زر الرجوع للرئيسية
 @dp.callback_query(F.data == "back_home")
 async def back_to_home(callback: types.CallbackQuery):
     await callback.message.delete()
     await callback.message.answer("تم العودة للقائمة الرئيسية 🏠", reply_markup=get_main_menu())
     await callback.answer()
 
+# الاستجابة للضغط على الباقات
 @dp.callback_query(F.data.startswith("buy_"))
 async def process_buy(callback: types.CallbackQuery):
     await callback.answer("تم اختيار الباقة بنجاح!", show_alert=True)
 
+# تشغيل البوت
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
