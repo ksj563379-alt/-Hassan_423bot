@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
-TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
+TOKEN = "8667998783:AAHsm_foWznXIvwk64h1zgH4-pIZZH3s3IA"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
@@ -31,7 +31,6 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# معالج يعمل بأبسط طريقة ممكنة لأي رسالة تحتوي على كلمة "شراء"
 @dp.message(F.text.contains("شراء"))
 async def buy_server_command(message: types.Message):
     text = (
