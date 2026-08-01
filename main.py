@@ -3,22 +3,14 @@ import logging
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
-from aiogram.types import BotCommand  # أضفنا هذا الاستدعاء الخاص بقائمة الأوامر
+from aiogram.types import BotCommand
 
 TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# دالة لتهيئة زر "القائمة" الأزرق (Menu)
-async def set_commands(bot: Bot):
-    commands = [
-        BotCommand(command="start", description="رسالة البدء")
-        # تكدر تضيف أوامر ثانية هنا بالمستقبل إذا تحب
-    ]
-    await bot.set_my_commands(commands)
-
-# دالة إنشاء القائمة الرئيسية (الأزرار اللي جوة)
+# دالة القائمة الرئيسية (أزرار الـ Reply بالأسفل)
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -37,6 +29,12 @@ def get_main_menu():
 # 1. معالج أمر /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
+    # تعيين زر القائمة الأزرق للمستخدم تلقائياً عند الضغط على /start
+    try:
+        await bot.set_my_commands([BotCommand(command="start", description="رسالة البدء")])
+    except:
+        pass
+
     await message.answer(
         "أهلاً بك عزيزي في بوت البيع والشراء 🤖\nاختر ما يناسبك من القائمة أدناه 👇",
         reply_markup=get_main_menu()
@@ -136,10 +134,7 @@ async def back_to_home(callback: types.CallbackQuery):
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
-    
-    # تشغيل دالة الأوامر أول ما يشتغل البوت
-    await set_commands(bot)
-    
+    # حذفنا الأوامر الخارجية المعقدة ونقلناها داخل أمر الـ start لضمان عدم حدوث أي خطأ بالتشغيل
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
