@@ -31,8 +31,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# معالج شامل لأي ضغطة تحتوي على كلمة شراء
-@dp.message(F.text.regexp(r"(شراء|سيرفر)"))
+@dp.message(F.text.contains("شراء سيرفر"))
 async def buy_server_command(message: types.Message):
     text = (
         "🛒 شراء سيرفر\n\n"
