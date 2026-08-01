@@ -9,7 +9,6 @@ TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# دالة القائمة الرئيسية (أزرار الكيبورد السفلي)
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -25,7 +24,6 @@ def get_main_menu():
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
-# 1. معالج أمر /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -33,7 +31,6 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# 2. معالج زر "شراء سيرفر" من الكيبورد السفلي
 @dp.message(F.text == "🛒 شراء سيرفر")
 async def buy_server_command(message: types.Message):
     text = (
@@ -52,27 +49,18 @@ async def buy_server_command(message: types.Message):
     keyboard.button(text="🔙 رجوع", callback_data="back_home")
     keyboard.adjust(1)
     
-    await message.answer(
-        text,
-        reply_markup=keyboard.as_markup()
-    )
+    await message.answer(text, reply_markup=keyboard.as_markup())
 
-# 3. معالج النصوص العامة الأخرى
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
-    
     if "الأسعار" in txt:
         await message.answer("قائمة الأسعار الحالية", reply_markup=get_main_menu())
     elif "حسابي" in txt:
         await message.answer("معلومات حسابك", reply_markup=get_main_menu())
     else:
-        await message.answer(
-            f"النص المستلم: {txt}",
-            reply_markup=get_main_menu()
-        )
+        await message.answer(f"النص المستلم: {txt}", reply_markup=get_main_menu())
 
-# قائمة باقات آسيا ريد
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -82,13 +70,9 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
-    await callback.message.edit_text(
-        "📊 باقات آسيا ريد: 🇮🇶",
-        reply_markup=keyboard.as_markup()
-    )
+    await callback.message.edit_text("📊 باقات آسيا ريد: 🇮🇶", reply_markup=keyboard.as_markup())
     await callback.answer()
 
-# قائمة باقات أودي (تظهر الأزرار المطلوبة بدقة)
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -98,13 +82,9 @@ async def audi_server_menu(callback: types.CallbackQuery):
     keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
-    await callback.message.edit_text(
-        "🎧 باقات أودي:",
-        reply_markup=keyboard.as_markup()
-    )
+    await callback.message.edit_text("🎧 باقات أودي:", reply_markup=keyboard.as_markup())
     await callback.answer()
 
-# زر الرجوع لقائمة اختيار السيرفرات الرئيسية
 @dp.callback_query(F.data == "back_to_buy")
 async def back_to_buy_menu(callback: types.CallbackQuery):
     text = (
@@ -117,27 +97,19 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
         "🚀 أداء ممتاز للتصفح والألعاب\n"
         "_________________________"
     )
-    
     keyboard = InlineKeyboardBuilder()
     keyboard.button(text="🇮🇶 آسيا ريد", callback_data="asia_reed")
     keyboard.button(text="🎧 أودي", callback_data="audi_server")
     keyboard.button(text="🔙 رجوع", callback_data="back_home")
     keyboard.adjust(1)
     
-    await callback.message.edit_text(
-        text,
-        reply_markup=keyboard.as_markup()
-    )
+    await callback.message.edit_text(text, reply_markup=keyboard.as_markup())
     await callback.answer()
 
-# زر الرجوع للقائمة الرئيسية (الكيبورد السفلي)
 @dp.callback_query(F.data == "back_home")
 async def back_to_home(callback: types.CallbackQuery):
     await callback.message.delete()
-    await callback.message.answer(
-        "تم العودة للقائمة الرئيسية 🏠",
-        reply_markup=get_main_menu()
-    )
+    await callback.message.answer("تم العودة للقائمة الرئيسية 🏠", reply_markup=get_main_menu())
     await callback.answer()
 
 async def main():
