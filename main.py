@@ -9,7 +9,7 @@ TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# دالة إنشاء القائمة الرئيسية
+# دالة القائمة الرئيسية (أزرار الـ Reply اللي بالأسفل)
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -25,7 +25,7 @@ def get_main_menu():
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
-# 1. معالج أمر /start (يظهر القائمة الرئيسية مباشرة)
+# 1. معالج أمر /start (لازم يكون بالبداية)
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -33,7 +33,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# 2. معالج النصوص العامة والأزرار
+# 2. معالج الأزرار والنصوص العامة
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
