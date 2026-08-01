@@ -18,13 +18,15 @@ async def cmd_account(message: types.Message):
 
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
-    if message.text == "💰 الأسعار":
+    text_content = message.text
+    
+    if "الأسعار" in text_content:
         await message.answer("قائمة الأسعار الحالية")
         
-    elif message.text == "👤 حسابي":
+    elif "حسابي" in text_content:
         await message.answer("معلومات حسابك")
         
-    elif message.text == "🛒 شراء سيرفر":
+    elif "شراء سيرفر" in text_content:
         text = (
             "🛒 **شراء سيرفر**\n\n"
             "____________________\n\n"
@@ -43,7 +45,7 @@ async def handle_all_messages(message: types.Message):
         await message.answer(text, reply_markup=keyboard.as_markup(), parse_mode="Markdown")
         
     else:
-        await message.answer("تم اختيار: " + message.text)
+        await message.answer("تم اختيار: " + text_content)
 
 async def main():
     logging.basicConfig(level=logging.INFO)
@@ -52,4 +54,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
