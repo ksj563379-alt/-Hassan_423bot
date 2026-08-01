@@ -9,7 +9,7 @@ TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# دالة القائمة الرئيسية (أزرار الـ Reply بالأسفل)
+# دالة القائمة الرئيسية (أزرار الكيبورد السفلي)
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -37,12 +37,12 @@ async def cmd_start(message: types.Message):
 @dp.message(F.text == "🛒 شراء سيرفر")
 async def buy_server_command(message: types.Message):
     text = (
-        "**🛒 شراء سيرفر**\n\n"
+        "🛒 شراء سيرفر\n\n"
         "_________________________\n\n"
         "اختر نوع السيرفر المناسب لك 👇\n\n"
-        "🇮🇶 **آسيا ريد**\n"
+        "🇮🇶 آسيا ريد\n"
         "⚡ سرعة واستقرار عالي\n\n"
-        "🎧 **أودي**\n"
+        "🎧 أودي\n"
         "🚀 أداء ممتاز للتصفح والألعاب\n"
         "_________________________"
     )
@@ -54,11 +54,10 @@ async def buy_server_command(message: types.Message):
     
     await message.answer(
         text,
-        reply_markup=keyboard.as_markup(),
-        parse_mode="Markdown"
+        reply_markup=keyboard.as_markup()
     )
 
-# 3. معالج بقية النصوص العامة
+# 3. معالج النصوص العامة الأخرى
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
@@ -84,13 +83,12 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard.adjust(1)
     
     await callback.message.edit_text(
-        "📊 **باقات آسيا ريد:** 🇮🇶",
-        reply_markup=keyboard.as_markup(),
-        parse_mode="Markdown"
+        "📊 باقات آسيا ريد: 🇮🇶",
+        reply_markup=keyboard.as_markup()
     )
     await callback.answer()
 
-# قائمة باقات أودي (تعرض الأزرار تماماً مثل الصورة المطلوبة)
+# قائمة باقات أودي (تظهر الأزرار المطلوبة بدقة)
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -101,9 +99,8 @@ async def audi_server_menu(callback: types.CallbackQuery):
     keyboard.adjust(1)
     
     await callback.message.edit_text(
-        "🎧 **باقات أودي:**",
-        reply_markup=keyboard.as_markup(),
-        parse_mode="Markdown"
+        "🎧 باقات أودي:",
+        reply_markup=keyboard.as_markup()
     )
     await callback.answer()
 
@@ -111,12 +108,12 @@ async def audi_server_menu(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "back_to_buy")
 async def back_to_buy_menu(callback: types.CallbackQuery):
     text = (
-        "**🛒 شراء سيرفر**\n\n"
+        "🛒 شراء سيرفر\n\n"
         "_________________________\n\n"
         "اختر نوع السيرفر المناسب لك 👇\n\n"
-        "🇮🇶 **آسيا ريد**\n"
+        "🇮🇶 آسيا ريد\n"
         "⚡ سرعة واستقرار عالي\n\n"
-        "🎧 **أودي**\n"
+        "🎧 أودي\n"
         "🚀 أداء ممتاز للتصفح والألعاب\n"
         "_________________________"
     )
@@ -129,8 +126,7 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
     
     await callback.message.edit_text(
         text,
-        reply_markup=keyboard.as_markup(),
-        parse_mode="Markdown"
+        reply_markup=keyboard.as_markup()
     )
     await callback.answer()
 
