@@ -29,7 +29,6 @@ def get_main_menu():
 # 1. معالج أمر /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    # تعيين زر القائمة الأزرق للمستخدم تلقائياً عند الضغط على /start
     try:
         await bot.set_my_commands([BotCommand(command="start", description="رسالة البدء")])
     except:
@@ -80,6 +79,7 @@ async def handle_all_messages(message: types.Message):
             reply_markup=get_main_menu()
         )
 
+# قائمة باقات آسيا ريد
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -96,6 +96,24 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     )
     await callback.answer()
 
+# قائمة باقات أودي (الجديدة)
+@dp.callback_query(F.data == "audi_server")
+async def audi_server_menu(callback: types.CallbackQuery):
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(text="أودي 3 أشهر - 8000 دينار", callback_data="buy_audi_3m")
+    keyboard.button(text="أودي شهرين - 6000 دينار", callback_data="buy_audi_2m")
+    keyboard.button(text="أودي شهر - 4000 دينار", callback_data="buy_audi_1m")
+    keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
+    keyboard.adjust(1)
+    
+    await callback.message.edit_text(
+        "🎧 **باقات أودي:**",
+        reply_markup=keyboard.as_markup(),
+        parse_mode="Markdown"
+    )
+    await callback.answer()
+
+# زر الرجوع لقائمة اختيار السيرفرات الرئيسية
 @dp.callback_query(F.data == "back_to_buy")
 async def back_to_buy_menu(callback: types.CallbackQuery):
     text = (
@@ -122,6 +140,7 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
     )
     await callback.answer()
 
+# زر الرجوع للقائمة الرئيسية (الكيبورد السفلي)
 @dp.callback_query(F.data == "back_home")
 async def back_to_home(callback: types.CallbackQuery):
     await callback.message.delete()
@@ -134,7 +153,6 @@ async def back_to_home(callback: types.CallbackQuery):
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
-    # حذفنا الأوامر الخارجية المعقدة ونقلناها داخل أمر الـ start لضمان عدم حدوث أي خطأ بالتشغيل
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
