@@ -1,12 +1,28 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types, F
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
 TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
+
+# دالة إنشاء القائمة الرئيسية (الأزرار اللي جوة بالدردشة)
+def get_main_menu():
+    builder = ReplyKeyboardBuilder()
+    builder.button(text="🛒 شراء سيرفر")
+    builder.button(text="📱 اشتراكاتي")
+    builder.button(text="💳 طرق الدفع")
+    builder.button(text="🔄 تجديد الاشتراك")
+    builder.button(text="📖 طريقة الاستعمال")
+    builder.button(text="💰 الأسعار")
+    builder.button(text="👤 حسابي")
+    builder.button(text="📞 تواصل معنا")
+    builder.button(text="💰 محفظتي")
+    builder.button(text="👥 دعوة أصدقاء")
+    builder.adjust(2) # ترتيب كل زرين بصف واحد
+    return builder.as_markup(resize_keyboard=True)
 
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
@@ -36,18 +52,15 @@ async def handle_all_messages(message: types.Message):
         )
         
     elif "الأسعار" in txt:
-        await message.answer(
-            "قائمة الأسعار الحالية"
-        )
+        await message.answer("قائمة الأسعار الحالية")
         
     elif "حسابي" in txt:
-        await message.answer(
-            "معلومات حسابك"
-        )
+        await message.answer("معلومات حسابك")
         
     else:
         await message.answer(
-            f"النص المستلم: {txt}"
+            f"النص المستلم: {txt}",
+            reply_markup=get_main_menu()
         )
 
 @dp.callback_query(F.data == "asia_reed")
@@ -94,18 +107,12 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
 
 @dp.callback_query(F.data == "back_home")
 async def back_to_home(callback: types.CallbackQuery):
-    text = "أهلاً بك في بوت البيع والشراء 🤖\nاختر ما يناسبك من القائمة أدناه:"
-    
-    keyboard = InlineKeyboardBuilder()
-    keyboard.button(text="🛒 شراء سيرفر", callback_data="buy_server_menu")
-    keyboard.button(text="📋 الأسعار", callback_data="prices")
-    keyboard.button(text="👤 حسابي", callback_data="account")
-    keyboard.adjust(1)
-    
-    await callback.message.edit_text(
-        text,
-        reply_markup=keyboard.as_markup(),
-        parse_mode="Markdown"
+    # مسح رسالة السيرفر الشفافة
+    await callback.message.delete()
+    # إرسال رسالة تنبهه وترجع القائمة الرئيسية تظهر جوة
+    await callback.message.answer(
+        "تم العودة للقائمة الرئيسية 🏠",
+        reply_markup=get_main_menu()
     )
     await callback.answer()
 
