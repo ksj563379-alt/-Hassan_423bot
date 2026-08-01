@@ -84,7 +84,6 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     await callback.message.edit_text("📊 باقات آسيا ريد: 🇮🇶", reply_markup=keyboard.as_markup())
     await callback.answer()
 
-# باقات أودي بالأسعار القديمة (8000 / 6000 / 4000)
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -131,7 +130,6 @@ async def process_buy(callback: types.CallbackQuery):
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
-    # تفريغ أي اتصالات أو طلبات سابقة معلقة
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
