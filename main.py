@@ -92,6 +92,23 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
     )
     await callback.answer()
 
+@dp.callback_query(F.data == "back_home")
+async def back_to_home(callback: types.CallbackQuery):
+    text = "أهلاً بك في بوت البيع والشراء 🤖\nاختر ما يناسبك من القائمة أدناه:"
+    
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(text="🛒 شراء سيرفر", callback_data="buy_server_menu")
+    keyboard.button(text="📋 الأسعار", callback_data="prices")
+    keyboard.button(text="👤 حسابي", callback_data="account")
+    keyboard.adjust(1)
+    
+    await callback.message.edit_text(
+        text,
+        reply_markup=keyboard.as_markup(),
+        parse_mode="Markdown"
+    )
+    await callback.answer()
+
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
