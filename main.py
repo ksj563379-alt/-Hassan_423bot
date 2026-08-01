@@ -4,7 +4,6 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
-# التوكن الجديد
 TOKEN = "8667998783:AAGI4iCHR2JMO9DtpsciltSlrlKLBLalktM"
 
 bot = Bot(token=TOKEN)
