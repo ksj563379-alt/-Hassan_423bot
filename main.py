@@ -25,7 +25,7 @@ def get_main_menu():
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
-# 1. معالج أمر /start (لازم يكون بالبداية قبل النصوص)
+# 1. معالج أمر /start (يظهر القائمة الرئيسية مباشرة)
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -33,7 +33,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# 2. معالج النصوص العامة
+# 2. معالج النصوص العامة والأزرار
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
@@ -62,10 +62,10 @@ async def handle_all_messages(message: types.Message):
         )
         
     elif "الأسعار" in txt:
-        await message.answer("قائمة الأسعار الحالية")
+        await message.answer("قائمة الأسعار الحالية", reply_markup=get_main_menu())
         
     elif "حسابي" in txt:
-        await message.answer("معلومات حسابك")
+        await message.answer("معلومات حسابك", reply_markup=get_main_menu())
         
     else:
         await message.answer(
