@@ -31,8 +31,8 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# معالج دقيق يستجيب لأي ضغطة على زر الشراء بغض النظر عن الرموز
-@dp.message(F.text.func(lambda text: text and "شراء سيرفر" in text))
+# معالج مباشر ومخصص للنص الذي يرسله الزر بالتحديد
+@dp.message(F.text == "🛒 شراء سيرفر")
 async def buy_server_command(message: types.Message):
     text = (
         "🛒 شراء سيرفر\n\n"
@@ -51,16 +51,6 @@ async def buy_server_command(message: types.Message):
     keyboard.adjust(1)
     
     await message.answer(text, reply_markup=keyboard.as_markup())
-
-@dp.message(F.text)
-async def handle_all_messages(message: types.Message):
-    txt = message.text.strip()
-    if "الأسعار" in txt:
-        await message.answer("قائمة الأسعار الحالية", reply_markup=get_main_menu())
-    elif "حسابي" in txt:
-        await message.answer("معلومات حسابك", reply_markup=get_main_menu())
-    else:
-        await message.answer(f"النص المستلم: {txt}", reply_markup=get_main_menu())
 
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
