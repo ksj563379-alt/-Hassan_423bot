@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
 TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
@@ -23,6 +24,14 @@ def get_main_menu():
     builder.button(text="👥 دعوة أصدقاء")
     builder.adjust(2) # ترتيب كل زرين بصف واحد
     return builder.as_markup(resize_keyboard=True)
+
+# معالج أمر /start
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    await message.answer(
+        "أهلاً بك عزيزي في بوت البيع والشراء 🤖\nاختر ما يناسبك من القائمة أدناه 👇",
+        reply_markup=get_main_menu()
+    )
 
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
@@ -107,9 +116,7 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
 
 @dp.callback_query(F.data == "back_home")
 async def back_to_home(callback: types.CallbackQuery):
-    # مسح رسالة السيرفر الشفافة
     await callback.message.delete()
-    # إرسال رسالة تنبهه وترجع القائمة الرئيسية تظهر جوة
     await callback.message.answer(
         "تم العودة للقائمة الرئيسية 🏠",
         reply_markup=get_main_menu()
