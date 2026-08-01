@@ -9,6 +9,7 @@ TOKEN = "8667998783:AAHsm_foWznXIvwk64h1zgH4-pIZZH3s3IA"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
+# القائمة الرئيسية (Reply Keyboard)
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -24,6 +25,7 @@ def get_main_menu():
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
+# أمر البداية /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -31,6 +33,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
+# 1. زر شراء سيرفر
 @dp.message(F.text.contains("شراء"))
 async def buy_server_command(message: types.Message):
     text = (
@@ -51,6 +54,23 @@ async def buy_server_command(message: types.Message):
     
     await message.answer(text, reply_markup=keyboard.as_markup())
 
+# 2. زر عرض الأسعار (عرض الشامل بالأسعار الجديدة)
+@dp.message(F.text.contains("الأسعار"))
+async def show_prices_command(message: types.Message):
+    text = (
+        "💰 **قائمة الأسعار الحالية:**\n\n"
+        "🎧 **باقات أودي:**\n"
+        "• أودي شهر - 2000 دينار\n"
+        "• أودي شهرين - 3000 دينار\n"
+        "• أودي 3 أشهر - 3000 دينار\n\n"
+        "🇮🇶 **باقات آسيا ريد:**\n"
+        "• آسيا ريد شهر - 4000 دينار\n"
+        "• آسيا ريد شهرين - 6000 دينار\n"
+        "• آسيا ريد 3 أشهر - 8000 دينار"
+    )
+    await message.answer(text, parse_mode="Markdown")
+
+# قائمة باقات آسيا ريد
 @dp.callback_query(F.data == "asia_reed")
 async def asia_reed_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -63,10 +83,10 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     await callback.message.edit_text("📊 باقات آسيا ريد: 🇮🇶", reply_markup=keyboard.as_markup())
     await callback.answer()
 
+# قائمة باقات أودي (بالأسعار الجديدة المطلوبة)
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
-    # الأسعار الجديدة المباشرة هنا
     keyboard.button(text="أودي 3 أشهر - 3000 دينار", callback_data="buy_audi_3m")
     keyboard.button(text="أودي شهرين - 3000 دينار", callback_data="buy_audi_2m")
     keyboard.button(text="أودي شهر - 2000 دينار", callback_data="buy_audi_1m")
@@ -79,6 +99,7 @@ async def audi_server_menu(callback: types.CallbackQuery):
     )
     await callback.answer()
 
+# زر الرجوع إلى اختيار نوع السيرفر
 @dp.callback_query(F.data == "back_to_buy")
 async def back_to_buy_menu(callback: types.CallbackQuery):
     text = (
@@ -100,12 +121,19 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
     await callback.message.edit_text(text, reply_markup=keyboard.as_markup())
     await callback.answer()
 
+# زر الرجوع للقائمة الرئيسية
 @dp.callback_query(F.data == "back_home")
 async def back_to_home(callback: types.CallbackQuery):
     await callback.message.delete()
     await callback.message.answer("تم العودة للقائمة الرئيسية 🏠", reply_markup=get_main_menu())
     await callback.answer()
 
+# الاستجابة عند الضغط على أي باقة لشراء
+@dp.callback_query(F.data.startswith("buy_"))
+async def process_buy_selection(callback: types.CallbackQuery):
+    await callback.answer("تم اختيار الباقة! جاري توجيهك...", show_alert=True)
+
+# تشغيل البوت
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
