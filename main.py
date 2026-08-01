@@ -9,7 +9,7 @@ TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# دالة إنشاء القائمة الرئيسية (الأزرار اللي جوة بالدردشة)
+# دالة إنشاء القائمة الرئيسية
 def get_main_menu():
     builder = ReplyKeyboardBuilder()
     builder.button(text="🛒 شراء سيرفر")
@@ -22,10 +22,10 @@ def get_main_menu():
     builder.button(text="📞 تواصل معنا")
     builder.button(text="💰 محفظتي")
     builder.button(text="👥 دعوة أصدقاء")
-    builder.adjust(2) # ترتيب كل زرين بصف واحد
+    builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
-# معالج أمر /start
+# 1. معالج أمر /start (لازم يكون بالبداية قبل النصوص)
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     await message.answer(
@@ -33,6 +33,7 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
+# 2. معالج النصوص العامة
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
