@@ -68,7 +68,7 @@ async def back_to_buy_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
     keyboard.button(text="🇮🇶 آسيا ريد", callback_data="asia_reed")
     keyboard.button(text="🎧 أودي", callback_data="audi_server")
-    keyboard.button(text="🔙 رجوع", callback_data="back_home")
+    keyboard.button(text="🔙 رجوع", callback_data="back_to_buy")
     keyboard.adjust(1)
     
     await callback.message.edit_text(
