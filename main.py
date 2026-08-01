@@ -4,7 +4,8 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
-TOKEN = "8667998783:AAHsm_foWznXIvwk64h1zgH4-pIZZH3s3IA"
+# التوكن الجديد
+TOKEN = "8667998783:AAGI4iCHR2JMO9DtpsciltSlrlKLBLalktM"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
@@ -83,7 +84,7 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     await callback.message.edit_text("📊 باقات آسيا ريد: 🇮🇶", reply_markup=keyboard.as_markup())
     await callback.answer()
 
-# قائمة باقات أودي (بالأسعار الجديدة المطلوبة)
+# قائمة باقات أودي (بالأسعار الجديدة)
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -137,6 +138,8 @@ async def process_buy_selection(callback: types.CallbackQuery):
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
+    # إزالة أي جلسة أو Webhook قديم لتفادي التعليق
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
