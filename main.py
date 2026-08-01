@@ -3,7 +3,6 @@ import logging
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
-from aiogram.types import BotCommand
 
 TOKEN = "8670994653:AAFOmRKRGkaPmAG9Lccs9YCapDyivGp1YZU"
 
@@ -29,50 +28,45 @@ def get_main_menu():
 # 1. معالج أمر /start
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    try:
-        await bot.set_my_commands([BotCommand(command="start", description="رسالة البدء")])
-    except:
-        pass
-
     await message.answer(
         "أهلاً بك عزيزي في بوت البيع والشراء 🤖\nاختر ما يناسبك من القائمة أدناه 👇",
         reply_markup=get_main_menu()
     )
 
-# 2. معالج الأزرار والنصوص العامة
+# 2. معالج زر "شراء سيرفر" من الكيبورد السفلي
+@dp.message(F.text == "🛒 شراء سيرفر")
+async def buy_server_command(message: types.Message):
+    text = (
+        "**🛒 شراء سيرفر**\n\n"
+        "_________________________\n\n"
+        "اختر نوع السيرفر المناسب لك 👇\n\n"
+        "🇮🇶 **آسيا ريد**\n"
+        "⚡ سرعة واستقرار عالي\n\n"
+        "🎧 **أودي**\n"
+        "🚀 أداء ممتاز للتصفح والألعاب\n"
+        "_________________________"
+    )
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(text="🇮🇶 آسيا ريد", callback_data="asia_reed")
+    keyboard.button(text="🎧 أودي", callback_data="audi_server")
+    keyboard.button(text="🔙 رجوع", callback_data="back_home")
+    keyboard.adjust(1)
+    
+    await message.answer(
+        text,
+        reply_markup=keyboard.as_markup(),
+        parse_mode="Markdown"
+    )
+
+# 3. معالج بقية النصوص العامة
 @dp.message(F.text)
 async def handle_all_messages(message: types.Message):
     txt = message.text.strip()
     
-    if "شراء" in txt or "سيرفر" in txt:
-        text = (
-            "\n\n**🛒 شراء سيرفر**\n\n"
-            "_________________________\n\n"
-            "اختر نوع السيرفر المناسب لك 👇\n\n"
-            "🇮🇶 **آسيا ريد**\n\n"
-            "⚡ سرعة واستقرار عالي\n\n"
-            "🎧 **أودي**\n\n"
-            "🚀 أداء ممتاز للتصفح والألعاب\n"
-            "_________________________"
-        )
-        keyboard = InlineKeyboardBuilder()
-        keyboard.button(text="🇮🇶 آسيا ريد", callback_data="asia_reed")
-        keyboard.button(text="🎧 أودي", callback_data="audi_server")
-        keyboard.button(text="🔙 رجوع", callback_data="back_home")
-        keyboard.adjust(1)
-        
-        await message.answer(
-            text,
-            reply_markup=keyboard.as_markup(),
-            parse_mode="Markdown"
-        )
-        
-    elif "الأسعار" in txt:
+    if "الأسعار" in txt:
         await message.answer("قائمة الأسعار الحالية", reply_markup=get_main_menu())
-        
     elif "حسابي" in txt:
         await message.answer("معلومات حسابك", reply_markup=get_main_menu())
-        
     else:
         await message.answer(
             f"النص المستلم: {txt}",
@@ -96,7 +90,7 @@ async def asia_reed_menu(callback: types.CallbackQuery):
     )
     await callback.answer()
 
-# قائمة باقات أودي (الجديدة)
+# قائمة باقات أودي (تعرض الأزرار تماماً مثل الصورة المطلوبة)
 @dp.callback_query(F.data == "audi_server")
 async def audi_server_menu(callback: types.CallbackQuery):
     keyboard = InlineKeyboardBuilder()
@@ -117,12 +111,12 @@ async def audi_server_menu(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "back_to_buy")
 async def back_to_buy_menu(callback: types.CallbackQuery):
     text = (
-        "\n\n**🛒 شراء سيرفر**\n\n"
+        "**🛒 شراء سيرفر**\n\n"
         "_________________________\n\n"
         "اختر نوع السيرفر المناسب لك 👇\n\n"
-        "🇮🇶 **آسيا ريد**\n\n"
+        "🇮🇶 **آسيا ريد**\n"
         "⚡ سرعة واستقرار عالي\n\n"
-        "🎧 **أودي**\n\n"
+        "🎧 **أودي**\n"
         "🚀 أداء ممتاز للتصفح والألعاب\n"
         "_________________________"
     )
