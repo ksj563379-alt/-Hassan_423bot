@@ -91,7 +91,7 @@ async def cmd_buy_server(message: types.Message):
     keyboard.adjust(1)
     
     await message.answer(text, reply_markup=keyboard.as_markup(), parse_mode="Markdown")
-        
+
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
