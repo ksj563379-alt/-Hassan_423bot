@@ -31,8 +31,8 @@ async def cmd_start(message: types.Message):
         reply_markup=get_main_menu()
     )
 
-# معالج مخصص يستجيب فوراً لزر شراء سيرفر بالتحديد
-@dp.message(F.text.in_({"🛒 شراء سيرفر", "شراء سيرفر"}))
+# معالج دقيق يستجيب لأي ضغطة على زر الشراء بغض النظر عن الرموز
+@dp.message(F.text.func(lambda text: text and "شراء سيرفر" in text))
 async def buy_server_command(message: types.Message):
     text = (
         "🛒 شراء سيرفر\n\n"
