@@ -71,7 +71,27 @@ async def handle_all_messages(message: types.Message):
         await message.answer(f"معلومات حسابك:\nمعرف المستخدم: `{message.from_user.id}`", parse_mode="Markdown")
     else:
         await message.answer("تم اختيار: " + message.text)
-
+@dp.message(F.text == "🛒 شراء سيرفر")
+async def cmd_buy_server(message: types.Message):
+    text = (
+        "🛒 **شراء سيرفر**\n\n"
+        "____________________\n\n"
+        "اختر نوع السيرفر المناسب لك 👇\n\n"
+        "🇮🇶 **آسيا ريد**\n"
+        "⚡ سرعة واستقرار عالي\n\n"
+        "🎧 **أودي**\n"
+        "🚀 أداء ممتاز للتصفح والألعاب\n\n"
+        "____________________"
+    )
+    
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(text="🇮🇶 آسيا ريد", callback_data="asia_reed")
+    keyboard.button(text="🎧 أودي", callback_data="audi_server")
+    keyboard.button(text="🔙 رجوع", callback_data="back_home")
+    keyboard.adjust(1)
+    
+    await message.answer(text, reply_markup=keyboard.as_markup(), parse_mode="Markdown")
+        
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("Bot is starting...")
