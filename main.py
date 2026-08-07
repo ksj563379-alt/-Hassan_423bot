@@ -1,16 +1,29 @@
 import os
+import subprocess
 import asyncio
 from aiohttp import web
 
-# دالة استجابة بسيطة ليبقى السيرفر نشطاً على Render
+# دالة لتحميل وتشغيل نواة Xray في الخلفية
+def run_xray():
+    # تحميل وتشغيل Xray (ملف التنفيذ السريع لنظام لينكس)
+    if not os.path.exists("xray"):
+        os.system("curl -L -o xray.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip")
+        os.system("unzip xray.zip xray")
+        os.system("chmod +x xray")
+    
+    # تشغيل xray باستخدام ملف الـ config.json الذي أنشأناه
+    subprocess.Popen(["./xray", "-config", "config.json"])
+
 async def handle(request):
-    return web.Response(text="Bot is running successfully!")
+    return web.Response(text="VLESS Server is running successfully!")
 
 async def main():
+    # تشغيل Xray أولاً
+    run_xray()
+    
     app = web.Application()
     app.router.add_get("/", handle)
     
-    # قراءة البورت المخصص من بيئة ريندر، أو استخدام البورت 10000 كافتراضي
     port = int(os.environ.get("PORT", 10000))
     
     runner = web.AppRunner(app)
@@ -18,9 +31,7 @@ async def main():
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
     
-    print(f"Server started on port {port}")
-    
-    # إبقاء السيرفر قيد التشغيل دائمًا
+    print(f"VLESS Server started on port {port}")
     await asyncio.gather(*(asyncio.Event().wait(),))
 
 if __name__ == "__main__":
